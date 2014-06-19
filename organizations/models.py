@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.db.models import permalink, get_model
+from mptt.models import MPTTModel, TreeForeignKey
 from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
 
@@ -45,6 +46,17 @@ def get_user_model():
     return klass
 
 
+class OrganizationTree(MPTTModel):
+    name = models.CharField(max_length=255, blank=False, null=False)
+    parent = TreeForeignKey('self',
+                            null=True,
+                            blank=True,
+                            related_name=_(u"children"))
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+
 class Organization(OrganizationBase, TimeStampedModel):
     """
     Default Organization model.
@@ -52,6 +64,8 @@ class Organization(OrganizationBase, TimeStampedModel):
     slug = SlugField(max_length=200, blank=False, editable=True,
             populate_from='name', unique=True,
             help_text=_("The name in all lowercase, suitable for URL identification"))
+
+    org_type = models.ForeignKey(OrganizationTree)
 
     class Meta(OrganizationBase.Meta):
         verbose_name = _("organization")

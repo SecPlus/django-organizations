@@ -6,3 +6,4 @@ django-nose>=1.2
 
 # Required to test default models
 django-extensions>=0.9
+django-mptt
