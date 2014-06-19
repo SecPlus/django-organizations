@@ -56,6 +56,9 @@ class OrganizationTree(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
+    def __unicode__(self):
+        return self.name
+
 
 class Organization(OrganizationBase, TimeStampedModel):
     """
