@@ -3,3 +3,4 @@ Sphinx
 tox
 wheel
 django-mptt
+django-mptt-admin
